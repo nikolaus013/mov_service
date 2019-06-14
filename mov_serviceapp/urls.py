@@ -10,6 +10,8 @@ router.register('api/mov_serviceapp', FilmViewSet, 'movies')
 urlpatterns = [
 
     path('mov_serviceapp/', views.FilmList.as_view()),
-    path('mov_serviceapp/<int:pk>/', views.FilmList.as_view()),
+    path('mov_serviceapp/<int:pk>/$', views.FilmList.as_view()),
+    path (r'^mov_serviceapp/api/?P<pk>[0-9]+)/$',views.FilmDetail.as_view())
+
 
 ]

@@ -46,8 +46,7 @@ class FilmList(generics.ListCreateAPIView):
             return None
         return self.paginator.paginate_queryset(queryset, self.request, view=self)
 
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
+
 
     def put(self, request):
         serializer = filmSerializer(data=request.data)
@@ -57,13 +56,23 @@ class FilmList(generics.ListCreateAPIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def delete(self, request, pk):
+     film = get_object_or_404(Film, pk=pk)
+     film.delete()
+     return Response(status=status.HTTP_204_NO_CONTENT)
 
-def delete(self, request, pk):
-    film = get_object_or_404(Film, pk=pk)
-    film.delete()
-    return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class FilmDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Film.objects.all()
     serializer_class = filmSerializer
+
+    def get(self, request, pk):
+        todo = get_object_or_404(ToDo, pk=pk)
+        serializer = ToDoSerializer(todo)
+        return Response(serializer.data)
+
+    def delete(self, request, pk):
+        film = get_object_or_404(Film, pk=pk)
+        film.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
