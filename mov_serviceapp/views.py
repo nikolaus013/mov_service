@@ -7,7 +7,14 @@ from rest_framework.settings import api_settings
 from .serializers import filmSerializer, salaSerializer, projekcijaSerializer
 
 from rest_framework.response import Response
+from django.conf.urls import url
+from rest_framework_swagger.views import get_swagger_view
 
+schema_view = get_swagger_view(title='Api')
+
+urlpatterns = [
+    url(r'^$', schema_view)
+]
 
 class FilmList(generics.ListCreateAPIView):
     filter_backends = api_settings.DEFAULT_FILTER_BACKENDS
@@ -67,12 +74,3 @@ class FilmDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Film.objects.all()
     serializer_class = filmSerializer
 
-    def get(self, request, pk):
-        todo = get_object_or_404(ToDo, pk=pk)
-        serializer = ToDoSerializer(todo)
-        return Response(serializer.data)
-
-    def delete(self, request, pk):
-        film = get_object_or_404(Film, pk=pk)
-        film.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
